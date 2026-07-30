@@ -5,10 +5,8 @@ using ProjectThor.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("Default");
-if (!string.IsNullOrWhiteSpace(connectionString))
-{
-    builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
-}
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(string.IsNullOrWhiteSpace(connectionString) ? "Host=unconfigured" : connectionString));
 
 var app = builder.Build();
 

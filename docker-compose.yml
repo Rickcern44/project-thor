@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: projectthor
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./src/api
+    environment:
+      ConnectionStrings__Default: 'Host=postgres;Port=5432;Database=projectthor;Username=postgres;Password=postgres'
+    ports:
+      - '8080:8080'
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./src/web
+    environment:
+      PORT: 3000
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+
+volumes:
+  postgres-data:

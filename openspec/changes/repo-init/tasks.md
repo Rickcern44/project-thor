@@ -45,10 +45,10 @@
 
 ## 7. Docker & Local Dev Environment
 
-- [ ] 7.1 Write multi-stage `src/api/Dockerfile`
-- [ ] 7.2 Write multi-stage `src/web/Dockerfile`
-- [ ] 7.3 Write root `docker-compose.yml` wiring api + web + Postgres, with env vars matching section 3.2
-- [ ] 7.4 Verify: `docker-compose up` starts all three services and the API successfully connects to Postgres
+- [x] 7.1 Write multi-stage `src/api/Dockerfile`
+- [x] 7.2 Write multi-stage `src/web/Dockerfile`
+- [x] 7.3 Write root `docker-compose.yml` wiring api + web + Postgres, with env vars matching section 3.2
+- [x] 7.4 Verify: `docker-compose up` starts all three services and the API successfully connects to Postgres
 
 ## 8. Versioning
 
