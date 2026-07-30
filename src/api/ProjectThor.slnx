@@ -2,4 +2,7 @@
   <Folder Name="/Api/">
     <Project Path="Api/ProjectThor.Api.csproj" />
   </Folder>
+  <Folder Name="/Data/">
+    <Project Path="Data/ProjectThor.Data.csproj" />
+  </Folder>
 </Solution>

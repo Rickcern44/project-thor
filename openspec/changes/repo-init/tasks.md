@@ -14,11 +14,11 @@
 
 ## 3. EF Core + PostgreSQL Wiring
 
-- [ ] 3.1 Add EF Core + Npgsql packages; create empty `AppDbContext` in a shared `Data`/`Infrastructure` project
-- [ ] 3.2 Configure connection string resolution via environment variable / `dotnet user-secrets` (no hardcoded secrets)
-- [ ] 3.3 Add EF Core design-time factory for migration tooling
-- [ ] 3.4 Generate baseline migration; verify `dotnet ef database update` applies cleanly against a local Postgres
-- [ ] 3.5 Verify: fresh database + baseline migration produces the migrations history table with no domain tables
+- [x] 3.1 Add EF Core + Npgsql packages; create empty `AppDbContext` in a shared `Data`/`Infrastructure` project
+- [x] 3.2 Configure connection string resolution via environment variable / `dotnet user-secrets` (no hardcoded secrets)
+- [x] 3.3 Add EF Core design-time factory for migration tooling
+- [x] 3.4 Generate baseline migration; verify `dotnet ef database update` applies cleanly against a local Postgres
+- [x] 3.5 Verify: fresh database + baseline migration produces the migrations history table with no domain tables
 
 ## 4. Backend Test Harness
 
