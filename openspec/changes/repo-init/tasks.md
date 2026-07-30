@@ -22,10 +22,10 @@
 
 ## 4. Backend Test Harness
 
-- [ ] 4.1 Create xUnit v3 unit test project; add one trivial passing unit test
-- [ ] 4.2 Create xUnit v3 integration test project; add Testcontainers PostgreSQL dependency
-- [ ] 4.3 Write one integration test proving: container starts, migrations apply, connection succeeds
-- [ ] 4.4 Verify: `dotnet test` passes both projects from a clean clone
+- [x] 4.1 Create xUnit v3 unit test project; add one trivial passing unit test
+- [x] 4.2 Create xUnit v3 integration test project; add Testcontainers PostgreSQL dependency
+- [x] 4.3 Write one integration test proving: container starts, migrations apply, connection succeeds
+- [x] 4.4 Verify: `dotnet test` passes both projects from a clean clone
 
 ## 5. Frontend Scaffold (SvelteKit + PWA)
 

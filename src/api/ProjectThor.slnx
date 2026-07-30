@@ -5,4 +5,8 @@
   <Folder Name="/Data/">
     <Project Path="Data/ProjectThor.Data.csproj" />
   </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="Tests/ProjectThor.Api.IntegrationTests/ProjectThor.Api.IntegrationTests.csproj" />
+    <Project Path="Tests/ProjectThor.Api.UnitTests/ProjectThor.Api.UnitTests.csproj" />
+  </Folder>
 </Solution>
