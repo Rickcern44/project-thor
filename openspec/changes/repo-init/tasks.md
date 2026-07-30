@@ -1,8 +1,8 @@
 ## 1. Git & Workflow Foundations
 
 - [x] 1.1 `git init`, add root `.gitignore` (covers .NET, Node, IDE, Docker artifacts)
-- [ ] 1.2 Write `CONTRIBUTING.md` documenting branch-per-spec, commit-per-task, and Conventional Commits format
-- [ ] 1.3 Add root `.editorconfig`
+- [x] 1.2 Write `CONTRIBUTING.md` documenting branch-per-spec, commit-per-task, and Conventional Commits format
+- [x] 1.3 Add root `.editorconfig`
 
 ## 2. Backend Scaffold (Vertical Slice Architecture)
 
