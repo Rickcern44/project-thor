@@ -52,8 +52,8 @@
 
 ## 8. Versioning
 
-- [ ] 8.1 Add `GitVersion.yml` configured for Mainline mode
-- [ ] 8.2 Verify: `dotnet-gitversion` runs against the repo and outputs a computed version with no config errors
+- [x] 8.1 Add `GitVersion.yml` configured for Mainline mode
+- [x] 8.2 Verify: `dotnet-gitversion` runs against the repo and outputs a computed version with no config errors
 
 ## 9. Final Verification
 

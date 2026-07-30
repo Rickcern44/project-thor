@@ -1,0 +1,10 @@
+strategies: [Mainline]
+branches:
+  main:
+    regex: ^main$
+    is-mainline: true
+    increment: Patch
+  feature:
+    regex: ^(?!main$).+
+    increment: Inherit
+    source-branches: [main]
