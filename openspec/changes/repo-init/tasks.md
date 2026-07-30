@@ -57,6 +57,6 @@
 
 ## 9. Final Verification
 
-- [ ] 9.1 From a clean clone (or clean checkout), run the full sequence: backend build → backend tests → frontend build → frontend tests → `docker-compose up` → confirm all succeed
-- [ ] 9.2 Validate every scenario in `specs/repo-init/spec.md` against the actual repo state
-- [ ] 9.3 Commit with Conventional Commit message per `CONTRIBUTING.md`
+- [x] 9.1 From a clean clone (or clean checkout), run the full sequence: backend build → backend tests → frontend build → frontend tests → `docker-compose up` → confirm all succeed
+- [x] 9.2 Validate every scenario in `specs/repo-init/spec.md` against the actual repo state
+- [x] 9.3 Commit with Conventional Commit message per `CONTRIBUTING.md`
