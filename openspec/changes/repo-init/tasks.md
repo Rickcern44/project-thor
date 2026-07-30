@@ -9,8 +9,8 @@
 - [x] 2.1 Create `src/api` .NET 10 solution and web project
 - [x] 2.2 Create `Features/` root; remove/avoid default `Controllers/Services/Repositories` scaffolding
 - [x] 2.3 Implement one example vertical slice: `Features/Health/` with a `/health` endpoint (request → handler → endpoint colocated)
-- [ ] 2.4 Add `dotnet format` configuration for the backend
-- [ ] 2.5 Verify: `dotnet build` succeeds and `GET /health` returns success
+- [x] 2.4 Add `dotnet format` configuration for the backend
+- [x] 2.5 Verify: `dotnet build` succeeds and `GET /health` returns success
 
 ## 3. EF Core + PostgreSQL Wiring
 
