@@ -39,9 +39,9 @@
 
 ## 6. Frontend Test Harness
 
-- [ ] 6.1 Add Playwright, configure `webServer` to boot the SvelteKit dev server automatically
-- [ ] 6.2 Write one trivial passing test (e.g. home page renders)
-- [ ] 6.3 Verify: Playwright test command passes from a clean clone with no manual server startup
+- [x] 6.1 Add Playwright, configure `webServer` to boot the SvelteKit dev server automatically
+- [x] 6.2 Write one trivial passing test (e.g. home page renders)
+- [x] 6.3 Verify: Playwright test command passes from a clean clone with no manual server startup
 
 ## 7. Docker & Local Dev Environment
 
