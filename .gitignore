@@ -30,6 +30,9 @@ node_modules/
 *.swp
 .DS_Store
 
+# Claude Code local settings (machine-specific, not shared)
+.claude/settings.local.json
+
 # EF Core
 *.db
 
