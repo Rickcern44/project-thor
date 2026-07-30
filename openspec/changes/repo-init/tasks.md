@@ -29,13 +29,13 @@
 
 ## 5. Frontend Scaffold (SvelteKit + PWA)
 
-- [ ] 5.1 Scaffold `src/web` via SvelteKit 5 CLI (TypeScript)
-- [ ] 5.2 Add TailwindCSS via official Svelte integration
-- [ ] 5.3 Establish component-based structure (`lib/components/`, file-based `routes/`)
-- [ ] 5.4 Add `@vite-pwa/sveltekit` (or equivalent) with `generateSW` strategy; configure manifest (name, icons, theme)
-- [ ] 5.5 Add placeholder app icons for manifest requirements
-- [ ] 5.6 Add ESLint + Prettier configuration
-- [ ] 5.7 Verify: production build serves a valid manifest and registers a Service Worker with no console errors
+- [x] 5.1 Scaffold `src/web` via SvelteKit 5 CLI (TypeScript)
+- [x] 5.2 Add TailwindCSS via official Svelte integration
+- [x] 5.3 Establish component-based structure (`lib/components/`, file-based `routes/`)
+- [x] 5.4 Add `@vite-pwa/sveltekit` (or equivalent) with `generateSW` strategy; configure manifest (name, icons, theme)
+- [x] 5.5 Add placeholder app icons for manifest requirements
+- [x] 5.6 Add ESLint + Prettier configuration
+- [x] 5.7 Verify: production build serves a valid manifest and registers a Service Worker with no console errors
 
 ## 6. Frontend Test Harness
 
