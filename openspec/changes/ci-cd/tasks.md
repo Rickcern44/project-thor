@@ -25,12 +25,12 @@
 
 ## 4. Web Build & Promote Workflow
 
-- [ ] 4.1 Add `.github/workflows/web-build-and-promote.yml`, triggered on `push` to `main`, path-filtered to `src/web/**` only
-- [ ] 4.2 Run GitVersion action to compute the version for this run
-- [ ] 4.3 Build and push the `web` image to `ghcr.io`, tagged with the computed version (and `latest`)
-- [ ] 4.4 Run `kustomize edit set image` in `infrastructure/deploy/` to pin only the `web` image entry to the computed version
-- [ ] 4.5 Commit the manifest change to `main` as `github-actions[bot]` (message identifying the version), using the same `concurrency` group as the `api` promote workflow and a pull/rebase-retry before push
-- [ ] 4.6 Verify workflow syntax locally; confirm the path filter means a `src/api/**`- or `infrastructure/deploy/**`-only commit does not re-trigger this workflow
+- [x] 4.1 Add `.github/workflows/web-build-and-promote.yml`, triggered on `push` to `main`, path-filtered to `src/web/**` only
+- [x] 4.2 Run GitVersion action to compute the version for this run
+- [x] 4.3 Build and push the `web` image to `ghcr.io`, tagged with the computed version (and `latest`)
+- [x] 4.4 Run `kustomize edit set image` in `infrastructure/deploy/` to pin only the `web` image entry to the computed version
+- [x] 4.5 Commit the manifest change to `main` as `github-actions[bot]` (message identifying the version), using the same `concurrency` group as the `api` promote workflow and a pull/rebase-retry before push
+- [x] 4.6 Verify workflow syntax locally; confirm the path filter means a `src/api/**`- or `infrastructure/deploy/**`-only commit does not re-trigger this workflow
 
 ## 5. GitHub Remote Setup (manual, user-owned — no GitHub access from this environment)
 
