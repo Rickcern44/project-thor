@@ -16,12 +16,12 @@
 
 ## 3. API Build & Promote Workflow
 
-- [ ] 3.1 Add `.github/workflows/api-build-and-promote.yml`, triggered on `push` to `main`, path-filtered to `src/api/**` only
-- [ ] 3.2 Run GitVersion action to compute the version for this run
-- [ ] 3.3 Build and push the `api` image to `ghcr.io`, tagged with the computed version (and `latest`)
-- [ ] 3.4 Run `kustomize edit set image` in `infrastructure/deploy/` to pin only the `api` image entry to the computed version
-- [ ] 3.5 Commit the manifest change to `main` as `github-actions[bot]` (message identifying the version), using a `concurrency` group shared with the `web` promote workflow and a pull/rebase-retry before push to avoid racing a concurrent `web` commit
-- [ ] 3.6 Verify workflow syntax locally; confirm the path filter means a `src/web/**`- or `infrastructure/deploy/**`-only commit does not re-trigger this workflow
+- [x] 3.1 Add `.github/workflows/api-build-and-promote.yml`, triggered on `push` to `main`, path-filtered to `src/api/**` only
+- [x] 3.2 Run GitVersion action to compute the version for this run
+- [x] 3.3 Build and push the `api` image to `ghcr.io`, tagged with the computed version (and `latest`)
+- [x] 3.4 Run `kustomize edit set image` in `infrastructure/deploy/` to pin only the `api` image entry to the computed version
+- [x] 3.5 Commit the manifest change to `main` as `github-actions[bot]` (message identifying the version), using a `concurrency` group shared with the `web` promote workflow and a pull/rebase-retry before push to avoid racing a concurrent `web` commit
+- [x] 3.6 Verify workflow syntax locally; confirm the path filter means a `src/web/**`- or `infrastructure/deploy/**`-only commit does not re-trigger this workflow
 
 ## 4. Web Build & Promote Workflow
 
