@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-thor-web
+  labels:
+    app: project-thor-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: project-thor-web
+  template:
+    metadata:
+      labels:
+        app: project-thor-web
+    spec:
+      containers:
+        - name: web
+          image: ghcr.io/rickcern44/project-thor-web:placeholder
+          ports:
+            - containerPort: 3000
