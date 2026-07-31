@@ -34,9 +34,9 @@
 
 ## 5. GitHub Remote Setup (manual, user-owned — no GitHub access from this environment)
 
-- [ ] 5.1 Create the GitHub repository and push `main`
-- [ ] 5.2 Enable branch protection on `main` requiring the CI workflow to pass before merge
-- [ ] 5.3 Confirm the default `GITHUB_TOKEN` has `packages: write` (Settings → Actions → Workflow permissions), needed for pushing to `ghcr.io`
+- [x] 5.1 Create the GitHub repository and push `main`
+- [x] 5.2 Enable branch protection on `main` requiring the CI workflow to pass before merge
+- [x] 5.3 Confirm the default `GITHUB_TOKEN` has `packages: write` (Settings → Actions → Workflow permissions), needed for pushing to `ghcr.io`
 
 ## 6. Homelab Cluster Setup (manual, user-owned — no cluster access from this environment)
 
