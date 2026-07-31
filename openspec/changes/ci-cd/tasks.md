@@ -1,9 +1,9 @@
 ## 1. CI Workflow (PR Gate)
 
-- [ ] 1.1 Add `.github/workflows/ci.yml` triggered on `pull_request`
-- [ ] 1.2 Backend job: restore, `dotnet build`, `dotnet test` (unit + Testcontainers integration; runner needs Docker available)
-- [ ] 1.3 Frontend job: `npm ci`, `npm run check`, `npm run lint`, `npm run test:e2e` (Playwright, with browsers installed in-workflow)
-- [ ] 1.4 Verify workflow syntax locally (e.g. `actionlint` or `act -n`) since this environment cannot run it on GitHub directly
+- [x] 1.1 Add `.github/workflows/ci.yml` triggered on `pull_request`
+- [x] 1.2 Backend job: restore, `dotnet build`, `dotnet test` (unit + Testcontainers integration; runner needs Docker available)
+- [x] 1.3 Frontend job: `npm ci`, `npm run check`, `npm run lint`, `npm run test:e2e` (Playwright, with browsers installed in-workflow)
+- [x] 1.4 Verify workflow syntax locally (e.g. `actionlint` or `act -n`) since this environment cannot run it on GitHub directly
 
 ## 2. GitOps Manifests (`infrastructure/deploy/`)
 
