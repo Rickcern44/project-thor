@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-thor-api
+  labels:
+    app: project-thor-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: project-thor-api
+  template:
+    metadata:
+      labels:
+        app: project-thor-api
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/rickcern44/project-thor-api:placeholder
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ConnectionStrings__Default
+              valueFrom:
+                secretKeyRef:
+                  name: project-thor-api-secrets
+                  key: ConnectionStrings__Default

@@ -7,12 +7,12 @@
 
 ## 2. GitOps Manifests (`infrastructure/deploy/`)
 
-- [ ] 2.1 Create Kustomize base: `infrastructure/deploy/kustomization.yaml`
-- [ ] 2.2 `api` `Deployment` manifest: placeholder image tag, `envFrom`/`secretKeyRef` referencing `project-thor-api-secrets` for `ConnectionStrings__Default`, container port matching the Dockerfile's `8080`
-- [ ] 2.3 `api` `Service` manifest
-- [ ] 2.4 `web` `Deployment` manifest: placeholder image tag, container port matching the Dockerfile's `3000`
-- [ ] 2.5 `web` `Service` manifest
-- [ ] 2.6 Verify: `kustomize build infrastructure/deploy` produces valid manifests with no hardcoded secrets
+- [x] 2.1 Create Kustomize base: `infrastructure/deploy/kustomization.yaml`
+- [x] 2.2 `api` `Deployment` manifest: placeholder image tag, `envFrom`/`secretKeyRef` referencing `project-thor-api-secrets` for `ConnectionStrings__Default`, container port matching the Dockerfile's `8080`
+- [x] 2.3 `api` `Service` manifest
+- [x] 2.4 `web` `Deployment` manifest: placeholder image tag, container port matching the Dockerfile's `3000`
+- [x] 2.5 `web` `Service` manifest
+- [x] 2.6 Verify: `kustomize build infrastructure/deploy` produces valid manifests with no hardcoded secrets
 
 ## 3. API Build & Promote Workflow
 
