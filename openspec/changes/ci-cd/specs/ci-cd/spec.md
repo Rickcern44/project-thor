@@ -27,30 +27,33 @@ Every merge to `main` that touches `src/api/**` SHALL trigger a workflow that co
 - **THEN** neither the `api` nor the `web` build/push workflow runs
 
 ### Requirement: Deployment manifests reference immutable image tags
-`infrastructure/deploy/` SHALL reference `api` and `web` images by an exact version tag and SHALL NOT reference the `latest` tag.
+`infrastructure/deploy/api/` and `infrastructure/deploy/web/` SHALL each reference their own image by an exact version tag and SHALL NOT reference the `latest` tag.
 
 #### Scenario: Manifest inspection shows a pinned version
-- **WHEN** the `Deployment` manifests under `infrastructure/deploy/` are inspected after a promote run
+- **WHEN** the `Deployment` manifests under `infrastructure/deploy/api/` and `infrastructure/deploy/web/` are inspected after a promote run
 - **THEN** each image reference is an exact version tag (e.g. `0.1.7`), never `latest`
 
-### Requirement: Successful image push updates deployment manifests automatically
-After a successful image push for a service, that service's workflow SHALL update only that service's image tag in `infrastructure/deploy/` using Kustomize and commit the change to `main` without manual intervention, without altering the other service's tag.
+### Requirement: Successful image push updates deployment manifests automatically, per service
+After a successful image push for a service, that service's workflow SHALL update the image tag in that service's own `infrastructure/deploy/<service>/` directory using Kustomize and commit the change to `main` without manual intervention, without touching the other service's manifest directory.
 
 #### Scenario: Tag bump follows a successful push
 - **WHEN** the `api` image is pushed successfully for a given version
-- **THEN** `infrastructure/deploy/` is updated to reference that version for `api` only and committed to `main` by an automated identity, leaving the `web` image tag unchanged
+- **THEN** `infrastructure/deploy/api/` is updated to reference that version and committed to `main` by an automated identity, and `infrastructure/deploy/web/` is untouched
 
-#### Scenario: Concurrent tag bumps for both services do not clobber each other
-- **WHEN** a single commit to `main` touches both `src/api/**` and `src/web/**`, triggering both promote workflows at once
-- **THEN** both the `api` and `web` image tags end up updated in `infrastructure/deploy/`, with neither workflow's commit overwriting the other's change
+### Requirement: GitOps deployment manifests are independent per service
+`infrastructure/deploy/api/` and `infrastructure/deploy/web/` SHALL each be a self-contained Kustomize base (own `kustomization.yaml`, `Deployment`, and `Service`) buildable on its own, and the `api` `Deployment` SHALL reference its database connection string via a Kubernetes `Secret` rather than a hardcoded value.
 
-### Requirement: GitOps deployment manifests are complete and self-describing
-`infrastructure/deploy/` SHALL contain a Kustomize base with a `Deployment` and `Service` for both `api` and `web`, and the `api` `Deployment` SHALL reference its database connection string via a Kubernetes `Secret` rather than a hardcoded value.
-
-#### Scenario: Manifests build with Kustomize
-- **WHEN** `kustomize build infrastructure/deploy` is run
-- **THEN** it produces valid Kubernetes manifests for `api` and `web` with no hardcoded connection string
+#### Scenario: Each service's manifests build with Kustomize independently
+- **WHEN** `kustomize build infrastructure/deploy/api` and `kustomize build infrastructure/deploy/web` are each run on their own
+- **THEN** each produces valid Kubernetes manifests for that service alone, with no hardcoded connection string and no reference to the other service's resources
 
 #### Scenario: API Deployment declares its secret dependency
 - **WHEN** the `api` `Deployment` manifest is inspected
 - **THEN** it references a `Secret` (`project-thor-api-secrets`) for `ConnectionStrings__Default` via `secretKeyRef`
+
+### Requirement: Each service syncs to the cluster via its own ArgoCD Application
+The repo SHALL contain a reference ArgoCD `Application` manifest per service, each pointing `spec.source.path` at that service's own `infrastructure/deploy/<service>/` directory with automated sync enabled, so that a tag-bump commit to one service's directory triggers a sync of only that service's `Application`.
+
+#### Scenario: API tag bump does not affect the web Application's sync
+- **WHEN** `infrastructure/deploy/api/` is updated by a promote commit
+- **THEN** only the `project-thor-api` `Application` has new changes to sync; the `project-thor-web` `Application` reports no diff

@@ -10,9 +10,6 @@ permissions:
   contents: write
   packages: write
 
-concurrency:
-  group: deploy-manifest-commit
-
 env:
   IMAGE: ghcr.io/rickcern44/project-thor-web
 
@@ -59,14 +56,14 @@ jobs:
         uses: imranismail/setup-kustomize@v2
 
       - name: Set image tag in Kustomize base
-        working-directory: infrastructure/deploy
+        working-directory: infrastructure/deploy/web
         run: kustomize edit set image ${{ env.IMAGE }}:${{ steps.gitversion.outputs.semVer }}
 
       - name: Commit and push manifest update
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add infrastructure/deploy/kustomization.yaml
+          git add infrastructure/deploy/web/kustomization.yaml
           git commit -m "chore(deploy): promote web to ${{ steps.gitversion.outputs.semVer }}"
 
           attempt=0
