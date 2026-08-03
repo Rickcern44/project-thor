@@ -1,9 +1,9 @@
 ## 1. Project & PWA Foundation
 
-- [ ] 1.1 Scaffold the web app project (framework, build, lint/format)
-- [ ] 1.2 Add PWA shell: manifest, installability, and a registered Service Worker
-- [ ] 1.3 Set up the data store and schema migration tooling
-- [ ] 1.4 Define core data model: users, roster records, game template, games, sign-ups, charges, notifications, push subscriptions
+- [x] 1.1 Scaffold the web app project (framework, build, lint/format) — already satisfied by `repo-init` (SvelteKit 5 + TailwindCSS + ESLint/Prettier)
+- [x] 1.2 Add PWA shell: manifest, installability, and a registered Service Worker — already satisfied by `repo-init` (`@vite-pwa/sveltekit`, verified in 5.7)
+- [x] 1.3 Set up the data store and schema migration tooling — already satisfied by `repo-init` (EF Core + Npgsql + migrations)
+- [x] 1.4 Define core data model: users, roster records, game template, games, sign-ups, charges, notifications, push subscriptions
 
 ## 2. Accounts, Roles & Auth
 
