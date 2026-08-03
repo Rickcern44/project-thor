@@ -40,7 +40,8 @@
 
 ## 6. Homelab Cluster Setup (manual, user-owned — no cluster access from this environment)
 
-- [ ] 6.1 Create the `project-thor-api-secrets` Secret on the cluster with the real `ConnectionStrings__Default` value
+- [ ] 6.0 Stand up Postgres as a standalone container outside the k8s cluster (per D10 — not an in-cluster `StatefulSet`), on stable homelab host storage; note the resulting host/port for 6.1
+- [ ] 6.1 Create the `project-thor-api-secrets` Secret on the cluster with the real `ConnectionStrings__Default` value pointing at the standalone Postgres container from 6.0
 - [ ] 6.2 Register both ArgoCD `Application` resources on the cluster (`kubectl apply -f infrastructure/argocd/api-application.yaml -f infrastructure/argocd/web-application.yaml`, or the `argocd app create` equivalent), confirming the `destination.namespace` and `destination.server` match the target cluster/namespace
 - [ ] 6.3 Confirm ArgoCD has pull access to this GitHub repo (public repo: none needed; private: configure ArgoCD repo credentials)
 
