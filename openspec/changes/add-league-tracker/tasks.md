@@ -7,11 +7,11 @@
 
 ## 2. Accounts, Roles & Auth
 
-- [ ] 2.1 Implement passwordless magic-link authentication (login/session, no passwords)
-- [ ] 2.2 Implement Admin and Player roles with role-based permission checks on every action
-- [ ] 2.3 Scope Player self-service actions to the player's own account
-- [ ] 2.4 Implement admin-invite flow (issue invite, accept, set credentials)
-- [ ] 2.5 Link accepted invites to imported roster records (carry over balance/history)
+- [x] 2.1 Implement passwordless magic-link authentication (login/session, no passwords)
+- [x] 2.2 Implement Admin and Player roles with role-based permission checks on every action
+- [x] 2.3 Scope Player self-service actions to the player's own account
+- [x] 2.4 Implement admin-invite flow (issue invite, accept, set credentials)
+- [x] 2.5 Link accepted invites to imported roster records (carry over balance/history)
 
 ## 3. Roster Import
 
