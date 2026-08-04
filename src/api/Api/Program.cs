@@ -12,6 +12,8 @@ using ProjectThor.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 // Resolved lazily via IConfiguration at first use (not read eagerly here) so that
 // WebApplicationFactory-based tests can override ConnectionStrings:Default after Program.cs runs.
 builder.Services.AddDbContext<AppDbContext>((sp, options) =>
@@ -66,6 +68,15 @@ builder.Services.AddScoped<GameSchedulingService>();
 builder.Services.AddHostedService<GameSchedulingBackgroundService>();
 
 var app = builder.Build();
+
+// Local dev convenience under Aspire: apply migrations automatically instead of a manual
+// `dotnet ef database update` step. Not relevant to production (K8s runs a built, migrated image).
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
 
 app.UseCors("Frontend");
 app.UseAuthentication();

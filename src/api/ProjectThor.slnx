@@ -9,4 +9,10 @@
     <Project Path="Tests/ProjectThor.Api.IntegrationTests/ProjectThor.Api.IntegrationTests.csproj" />
     <Project Path="Tests/ProjectThor.Api.UnitTests/ProjectThor.Api.UnitTests.csproj" />
   </Folder>
+  <Folder Name="/AppHost/">
+    <Project Path="../AppHost/ProjectThor.AppHost.csproj" />
+  </Folder>
+  <Folder Name="/ServiceDefaults/">
+    <Project Path="../ServiceDefaults/ProjectThor.ServiceDefaults.csproj" />
+  </Folder>
 </Solution>
