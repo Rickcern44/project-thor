@@ -1,17 +1,17 @@
 ## 1. Project & PWA Foundation
 
-- [ ] 1.1 Scaffold the web app project (framework, build, lint/format)
-- [ ] 1.2 Add PWA shell: manifest, installability, and a registered Service Worker
-- [ ] 1.3 Set up the data store and schema migration tooling
-- [ ] 1.4 Define core data model: users, roster records, game template, games, sign-ups, charges, notifications, push subscriptions
+- [x] 1.1 Scaffold the web app project (framework, build, lint/format) — already satisfied by `repo-init` (SvelteKit 5 + TailwindCSS + ESLint/Prettier)
+- [x] 1.2 Add PWA shell: manifest, installability, and a registered Service Worker — already satisfied by `repo-init` (`@vite-pwa/sveltekit`, verified in 5.7)
+- [x] 1.3 Set up the data store and schema migration tooling — already satisfied by `repo-init` (EF Core + Npgsql + migrations)
+- [x] 1.4 Define core data model: users, roster records, game template, games, sign-ups, charges, notifications, push subscriptions
 
 ## 2. Accounts, Roles & Auth
 
-- [ ] 2.1 Implement passwordless magic-link authentication (login/session, no passwords)
-- [ ] 2.2 Implement Admin and Player roles with role-based permission checks on every action
-- [ ] 2.3 Scope Player self-service actions to the player's own account
-- [ ] 2.4 Implement admin-invite flow (issue invite, accept, set credentials)
-- [ ] 2.5 Link accepted invites to imported roster records (carry over balance/history)
+- [x] 2.1 Implement passwordless magic-link authentication (login/session, no passwords)
+- [x] 2.2 Implement Admin and Player roles with role-based permission checks on every action
+- [x] 2.3 Scope Player self-service actions to the player's own account
+- [x] 2.4 Implement admin-invite flow (issue invite, accept, set credentials)
+- [x] 2.5 Link accepted invites to imported roster records (carry over balance/history)
 
 ## 3. Roster Import
 
