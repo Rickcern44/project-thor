@@ -6,12 +6,15 @@ using ProjectThor.Api.Features.GameTemplates;
 using ProjectThor.Api.Features.Games;
 using ProjectThor.Api.Features.Health;
 using ProjectThor.Api.Features.Invites;
+using ProjectThor.Api.Features.Notifications;
 using ProjectThor.Api.Features.SignUps;
 using ProjectThor.Api.Infrastructure.Email;
+using ProjectThor.Api.Infrastructure.Notifications;
 using ProjectThor.Api.Infrastructure.Payments;
 using ProjectThor.Api.Infrastructure.Scheduling;
 using ProjectThor.Data.Entities;
 using ProjectThor.Data;
+using WebPush;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +36,12 @@ builder.Services.AddHttpClient<IEmailSender, ResendEmailSender>((sp, client) =>
     client.DefaultRequestHeaders.Authorization =
         new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", resendOptions.ApiKey);
 });
+
+builder.Services.Configure<VapidOptions>(builder.Configuration.GetSection(VapidOptions.SectionName));
+builder.Services.AddSingleton<WebPushClient>();
+builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<SignupOpenNotificationService>();
+builder.Services.AddHostedService<NotificationBackgroundService>();
 
 var frontendOrigin = builder.Configuration["Frontend:Origin"] ?? "http://localhost:5173";
 builder.Services.AddCors(options =>
@@ -117,6 +126,12 @@ app.MapWaiveCharge();
 app.MapPayCharge();
 app.MapGetPlayerBalance();
 app.MapListOutstandingBalances();
+
+app.MapGetNotifications();
+app.MapMarkNotificationRead();
+app.MapGetVapidPublicKey();
+app.MapSubscribeToPush();
+app.MapUnsubscribeFromPush();
 
 app.Run();
 

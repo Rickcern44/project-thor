@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ProjectThor.Api.Infrastructure.Notifications;
 using ProjectThor.Data;
 using ProjectThor.Data.Entities;
 
@@ -16,6 +17,7 @@ public static class AdminPromoteFromWaitlistEndpoint
         Guid gameId,
         AdminPromoteRequest request,
         AppDbContext dbContext,
+        NotificationService notificationService,
         CancellationToken cancellationToken)
     {
         var game = await dbContext.Games.FirstOrDefaultAsync(g => g.Id == gameId, cancellationToken);
@@ -46,6 +48,9 @@ public static class AdminPromoteFromWaitlistEndpoint
         signUp.Status = SignUpStatus.Rostered;
         signUp.WaitlistPosition = null;
         await dbContext.SaveChangesAsync(cancellationToken);
+
+        await notificationService.NotifyAsync(
+            request.PlayerUserId, NotificationType.WaitlistPromotion, "You're in! A spot opened up and you've been added to the game.", cancellationToken);
 
         return Results.Ok(SignUpResponse.From(signUp));
     }

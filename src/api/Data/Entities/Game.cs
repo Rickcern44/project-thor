@@ -24,6 +24,9 @@ public class Game
     public bool IsCancelled { get; set; }
     public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
 
+    /// <summary>Set once the "sign-ups are open" notification has fired, so it's never sent twice.</summary>
+    public DateTimeOffset? SignupOpenNotifiedAt { get; set; }
+
     public GameState GetState(DateTimeOffset now)
     {
         if (now >= StartsAt)
