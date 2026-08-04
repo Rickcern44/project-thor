@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using ProjectThor.Api.Features.Auth;
+using ProjectThor.Api.Features.Charges;
 using ProjectThor.Api.Features.GameTemplates;
 using ProjectThor.Api.Features.Games;
 using ProjectThor.Api.Features.Health;
 using ProjectThor.Api.Features.Invites;
 using ProjectThor.Api.Features.SignUps;
 using ProjectThor.Api.Infrastructure.Email;
+using ProjectThor.Api.Infrastructure.Payments;
 using ProjectThor.Api.Infrastructure.Scheduling;
 using ProjectThor.Data.Entities;
 using ProjectThor.Data;
@@ -68,6 +70,9 @@ builder.Services
 builder.Services.AddScoped<GameSchedulingService>();
 builder.Services.AddHostedService<GameSchedulingBackgroundService>();
 
+builder.Services.AddScoped<PaymentReconciliationService>();
+builder.Services.AddHostedService<PaymentReconciliationBackgroundService>();
+
 var app = builder.Build();
 
 // Local dev convenience under Aspire: apply migrations automatically instead of a manual
@@ -107,6 +112,11 @@ app.MapGetGameRoster();
 app.MapAdminAddPlayer();
 app.MapAdminRemovePlayer();
 app.MapAdminPromoteFromWaitlist();
+
+app.MapWaiveCharge();
+app.MapPayCharge();
+app.MapGetPlayerBalance();
+app.MapListOutstandingBalances();
 
 app.Run();
 

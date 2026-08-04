@@ -42,13 +42,13 @@
 
 ## 6. Payment Tracking
 
-- [ ] 6.1 Configurable flat per-game fee
-- [ ] 6.2 Create charge on sign-up
-- [ ] 6.3 Erase charge on cancel before game time
-- [ ] 6.4 Mark charge owed for players on roster at game time
-- [ ] 6.5 Admin post-game waiver (no-show reconciliation)
-- [ ] 6.6 Mark charge paid; maintain per-player running balance
-- [ ] 6.7 Surface balances prominently; ensure balances never block sign-up
+- [x] 6.1 Configurable flat per-game fee (GameTemplate.Fee / Game.Fee, from §4; charges snapshot it at sign-up)
+- [x] 6.2 Create charge on sign-up
+- [x] 6.3 Erase charge on cancel before game time
+- [x] 6.4 Mark charge owed for players on roster at game time
+- [x] 6.5 Admin post-game waiver (no-show reconciliation)
+- [x] 6.6 Mark charge paid; maintain per-player running balance
+- [x] 6.7 Surface balances prominently; ensure balances never block sign-up
 
 ## 7. Notifications
 

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ProjectThor.Api.Infrastructure.Payments;
 using ProjectThor.Api.Infrastructure.SignUps;
 using ProjectThor.Data;
 using ProjectThor.Data.Entities;
@@ -48,6 +49,7 @@ public static class AdminAddPlayerEndpoint
             WaitlistPosition = waitlistPosition
         };
         dbContext.SignUps.Add(signUp);
+        dbContext.Charges.Add(ChargeFactory.CreateForSignUp(gameId, request.PlayerUserId, game.Fee));
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Results.Created($"/admin/games/{gameId}/roster/{signUp.Id}", SignUpResponse.From(signUp));

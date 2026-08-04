@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ProjectThor.Api.Infrastructure.Payments;
 using ProjectThor.Data;
 
 namespace ProjectThor.Api.Features.SignUps;
@@ -26,7 +27,9 @@ public static class AdminRemovePlayerEndpoint
             return Results.NotFound();
         }
 
-        signUp.CancelledAt = DateTimeOffset.UtcNow;
+        var now = DateTimeOffset.UtcNow;
+        signUp.CancelledAt = now;
+        await ChargeErasure.EraseIfOwedAsync(dbContext, gameId, playerUserId, now, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Results.NoContent();
