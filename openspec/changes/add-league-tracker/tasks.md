@@ -34,11 +34,11 @@
 
 ## 5. Sign-up & Waitlist
 
-- [ ] 5.1 Player self-service sign-up (roster while under capacity)
-- [ ] 5.2 Player self-service cancel (roster or waitlist)
-- [ ] 5.3 Waitlist overflow in arrival order when at capacity
-- [ ] 5.4 Admin add/remove any player to/from roster or waitlist
-- [ ] 5.5 Admin-decided waitlist promotion into an open spot (no auto-promote)
+- [x] 5.1 Player self-service sign-up (roster while under capacity)
+- [x] 5.2 Player self-service cancel (roster or waitlist)
+- [x] 5.3 Waitlist overflow in arrival order when at capacity
+- [x] 5.4 Admin add/remove any player to/from roster or waitlist
+- [x] 5.5 Admin-decided waitlist promotion into an open spot (no auto-promote)
 
 ## 6. Payment Tracking
 

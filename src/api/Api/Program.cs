@@ -5,6 +5,7 @@ using ProjectThor.Api.Features.GameTemplates;
 using ProjectThor.Api.Features.Games;
 using ProjectThor.Api.Features.Health;
 using ProjectThor.Api.Features.Invites;
+using ProjectThor.Api.Features.SignUps;
 using ProjectThor.Api.Infrastructure.Email;
 using ProjectThor.Api.Infrastructure.Scheduling;
 using ProjectThor.Data.Entities;
@@ -99,6 +100,13 @@ app.MapCreateAdHocGame();
 app.MapUpdateGame();
 app.MapCancelGame();
 app.MapListPastGames();
+
+app.MapSignUpForGame();
+app.MapCancelSignUp();
+app.MapGetGameRoster();
+app.MapAdminAddPlayer();
+app.MapAdminRemovePlayer();
+app.MapAdminPromoteFromWaitlist();
 
 app.Run();
 
