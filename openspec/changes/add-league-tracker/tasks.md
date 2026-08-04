@@ -52,11 +52,11 @@
 
 ## 7. Notifications
 
-- [ ] 7.1 In-app notification list (per-user baseline)
-- [ ] 7.2 Web Push setup (VAPID keys, subscription storage, server send path)
-- [ ] 7.3 Push permission UX + iOS "add to home screen" onboarding nudge
-- [ ] 7.4 Emit waitlist-promotion notification (in-app + push)
-- [ ] 7.5 Emit new-game/sign-ups-open notification (in-app + push)
+- [x] 7.1 In-app notification list (per-user baseline)
+- [x] 7.2 Web Push setup (VAPID keys, subscription storage, server send path)
+- [ ] 7.3 Push permission UX + iOS "add to home screen" onboarding nudge - deferred: pure frontend UI, no backend component; backend-first per user decision on 2026-08-04
+- [x] 7.4 Emit waitlist-promotion notification (in-app + push)
+- [x] 7.5 Emit new-game/sign-ups-open notification (in-app + push)
 
 ## 8. Verification
 
