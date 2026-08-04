@@ -9,9 +9,13 @@ using ProjectThor.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("Default");
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(string.IsNullOrWhiteSpace(connectionString) ? "Host=unconfigured" : connectionString));
+// Resolved lazily via IConfiguration at first use (not read eagerly here) so that
+// WebApplicationFactory-based tests can override ConnectionStrings:Default after Program.cs runs.
+builder.Services.AddDbContext<AppDbContext>((sp, options) =>
+{
+    var connectionString = sp.GetRequiredService<IConfiguration>().GetConnectionString("Default");
+    options.UseNpgsql(string.IsNullOrWhiteSpace(connectionString) ? "Host=unconfigured" : connectionString);
+});
 
 builder.Services.Configure<ResendOptions>(builder.Configuration.GetSection(ResendOptions.SectionName));
 builder.Services.AddHttpClient<IEmailSender, ResendEmailSender>((sp, client) =>
