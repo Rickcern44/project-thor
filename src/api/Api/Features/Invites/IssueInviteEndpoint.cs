@@ -20,31 +20,22 @@ public static class IssueInviteEndpoint
         IConfiguration configuration,
         CancellationToken cancellationToken)
     {
-        var rosterRecord = await dbContext.RosterRecords
-            .FirstOrDefaultAsync(r => r.Id == request.RosterRecordId, cancellationToken);
+        // The User is created when the RosterRecord is resolved (roster-import), not here - this
+        // endpoint only sends the credential to an identity that already exists (design.md D2's
+        // "invite is the first magic link" still holds; it's just decoupled from record creation
+        // now that historical roster-import needs a User to exist before anyone's been invited).
+        var user = await dbContext.Users
+            .FirstOrDefaultAsync(u => u.RosterRecordId == request.RosterRecordId, cancellationToken);
 
-        if (rosterRecord is null)
+        if (user is null)
         {
             return Results.NotFound();
         }
 
-        var alreadyInvited = await dbContext.Users
-            .AnyAsync(u => u.RosterRecordId == rosterRecord.Id, cancellationToken);
-        if (alreadyInvited)
+        if (user.Status != UserStatus.Pending)
         {
-            return Results.Conflict("A user has already been invited for this roster record.");
+            return Results.Conflict("This player has already activated their account.");
         }
-
-        var user = new User
-        {
-            Email = rosterRecord.Email,
-            Phone = rosterRecord.Phone,
-            Name = rosterRecord.Name,
-            Role = UserRole.Player,
-            Status = UserStatus.Pending,
-            RosterRecordId = rosterRecord.Id
-        };
-        dbContext.Users.Add(user);
 
         var (rawToken, hash) = MagicLinkTokenGenerator.Generate();
         dbContext.MagicLinkTokens.Add(new MagicLinkToken
