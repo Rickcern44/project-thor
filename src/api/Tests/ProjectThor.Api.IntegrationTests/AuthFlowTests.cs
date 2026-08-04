@@ -36,8 +36,8 @@ public class AuthFlowTests : IAsyncLifetime
     public async Task Player_cannot_issue_invites()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
-        var player = await SeedActiveUserAsync(UserRole.Player, cancellationToken);
-        using var client = await SignedInClientAsync(player, cancellationToken);
+        var player = await TestUsers.SeedActiveUserAsync(_fixture.Factory, UserRole.Player, cancellationToken);
+        using var client = await TestUsers.SignedInClientAsync(_fixture.Factory, player, cancellationToken);
 
         var response = await client.PostAsJsonAsync(
             "/admin/invites",
@@ -51,9 +51,9 @@ public class AuthFlowTests : IAsyncLifetime
     public async Task Admin_invite_creates_pending_user_and_sends_invite_email()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
-        var admin = await SeedActiveUserAsync(UserRole.Admin, cancellationToken);
+        var admin = await TestUsers.SeedActiveUserAsync(_fixture.Factory, UserRole.Admin, cancellationToken);
         var rosterRecord = await SeedRosterRecordAsync(cancellationToken);
-        using var client = await SignedInClientAsync(admin, cancellationToken);
+        using var client = await TestUsers.SignedInClientAsync(_fixture.Factory, admin, cancellationToken);
 
         var response = await client.PostAsJsonAsync(
             "/admin/invites",
@@ -74,10 +74,10 @@ public class AuthFlowTests : IAsyncLifetime
     public async Task Accepting_an_invite_activates_the_account_and_signs_in()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
-        var admin = await SeedActiveUserAsync(UserRole.Admin, cancellationToken);
+        var admin = await TestUsers.SeedActiveUserAsync(_fixture.Factory, UserRole.Admin, cancellationToken);
         var rosterRecord = await SeedRosterRecordAsync(cancellationToken);
 
-        using var adminClient = await SignedInClientAsync(admin, cancellationToken);
+        using var adminClient = await TestUsers.SignedInClientAsync(_fixture.Factory, admin, cancellationToken);
         await adminClient.PostAsJsonAsync("/admin/invites", new { RosterRecordId = rosterRecord.Id }, cancellationToken);
 
         var rawToken = ExtractToken(_fixture.Factory.EmailSender.SentEmails.Single(e => e.ToEmail == rosterRecord.Email).HtmlBody);
@@ -117,7 +117,7 @@ public class AuthFlowTests : IAsyncLifetime
     public async Task Login_link_signs_the_active_user_in()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
-        var player = await SeedActiveUserAsync(UserRole.Player, cancellationToken);
+        var player = await TestUsers.SeedActiveUserAsync(_fixture.Factory, UserRole.Player, cancellationToken);
         using var client = _fixture.Factory.CreateClient();
 
         await client.PostAsJsonAsync("/auth/login/request", new { Email = player.Email }, cancellationToken);
@@ -134,7 +134,7 @@ public class AuthFlowTests : IAsyncLifetime
     public async Task A_consumed_token_cannot_be_reused()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
-        var player = await SeedActiveUserAsync(UserRole.Player, cancellationToken);
+        var player = await TestUsers.SeedActiveUserAsync(_fixture.Factory, UserRole.Player, cancellationToken);
         using var client = _fixture.Factory.CreateClient();
 
         await client.PostAsJsonAsync("/auth/login/request", new { Email = player.Email }, cancellationToken);
@@ -155,25 +155,6 @@ public class AuthFlowTests : IAsyncLifetime
         return match.Groups[1].Value;
     }
 
-    private async Task<User> SeedActiveUserAsync(UserRole role, CancellationToken cancellationToken)
-    {
-        using var scope = _fixture.Factory.Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        var user = new User
-        {
-            Email = $"{Guid.NewGuid()}@example.com",
-            Phone = "555-0100",
-            Name = "Test User",
-            Role = role,
-            Status = UserStatus.Active,
-            ActivatedAt = DateTimeOffset.UtcNow
-        };
-        dbContext.Users.Add(user);
-        await dbContext.SaveChangesAsync(cancellationToken);
-        return user;
-    }
-
     private async Task<RosterRecord> SeedRosterRecordAsync(CancellationToken cancellationToken)
     {
         using var scope = _fixture.Factory.Services.CreateScope();
@@ -189,26 +170,5 @@ public class AuthFlowTests : IAsyncLifetime
         dbContext.RosterRecords.Add(rosterRecord);
         await dbContext.SaveChangesAsync(cancellationToken);
         return rosterRecord;
-    }
-
-    private async Task<HttpClient> SignedInClientAsync(User user, CancellationToken cancellationToken)
-    {
-        using var scope = _fixture.Factory.Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        var (rawToken, hash) = Infrastructure.Auth.MagicLinkTokenGenerator.Generate();
-        dbContext.MagicLinkTokens.Add(new MagicLinkToken
-        {
-            UserId = user.Id,
-            TokenHash = hash,
-            Purpose = MagicLinkPurpose.Login,
-            ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(15)
-        });
-        await dbContext.SaveChangesAsync(cancellationToken);
-
-        var client = _fixture.Factory.CreateClient();
-        var response = await client.PostAsJsonAsync("/auth/consume", new { Token = rawToken }, cancellationToken);
-        response.EnsureSuccessStatusCode();
-        return client;
     }
 }

@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using ProjectThor.Api.Features.Auth;
+using ProjectThor.Api.Features.GameTemplates;
+using ProjectThor.Api.Features.Games;
 using ProjectThor.Api.Features.Health;
 using ProjectThor.Api.Features.Invites;
 using ProjectThor.Api.Infrastructure.Email;
+using ProjectThor.Api.Infrastructure.Scheduling;
 using ProjectThor.Data.Entities;
 using ProjectThor.Data;
 
@@ -59,6 +62,9 @@ builder.Services
     .AddAuthorizationBuilder()
     .AddPolicy("AdminOnly", policy => policy.RequireRole(nameof(UserRole.Admin)));
 
+builder.Services.AddScoped<GameSchedulingService>();
+builder.Services.AddHostedService<GameSchedulingBackgroundService>();
+
 var app = builder.Build();
 
 app.UseCors("Frontend");
@@ -71,6 +77,17 @@ app.MapConsumeMagicLink();
 app.MapLogout();
 app.MapMe();
 app.MapIssueInvite();
+
+app.MapCreateGameTemplate();
+app.MapGetActiveGameTemplate();
+app.MapUpdateGameTemplate();
+app.MapDeactivateGameTemplate();
+
+app.MapGetLiveGame();
+app.MapCreateAdHocGame();
+app.MapUpdateGame();
+app.MapCancelGame();
+app.MapListPastGames();
 
 app.Run();
 

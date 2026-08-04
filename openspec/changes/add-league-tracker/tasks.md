@@ -23,14 +23,14 @@
 
 ## 4. Game Scheduling
 
-- [ ] 4.1 Recurring template CRUD (day, time, default capacity, fee, sign-up lead time)
-- [ ] 4.2 Time-based auto-generation of the next game when current game time passes
-- [ ] 4.3 Sign-up window: open game at start − lead time; game states (closed → open → past); validate lead time < inter-game interval
-- [ ] 4.4 Enforce single-live-game invariant (allow quiet gaps)
-- [ ] 4.5 Ad-hoc one-off game creation
-- [ ] 4.6 Per-game capacity override
-- [ ] 4.7 Independent-instance editing/cancellation (no series effects)
-- [ ] 4.8 "Past games awaiting reconciliation" list for admins
+- [x] 4.1 Recurring template CRUD (day, time, default capacity, fee, sign-up lead time)
+- [x] 4.2 Time-based auto-generation of the next game when current game time passes
+- [x] 4.3 Sign-up window: open game at start − lead time; game states (closed → open → past); validate lead time < inter-game interval
+- [x] 4.4 Enforce single-live-game invariant (allow quiet gaps)
+- [x] 4.5 Ad-hoc one-off game creation
+- [x] 4.6 Per-game capacity override
+- [x] 4.7 Independent-instance editing/cancellation (no series effects)
+- [x] 4.8 "Past games awaiting reconciliation" list for admins
 
 ## 5. Sign-up & Waitlist
 
