@@ -52,7 +52,7 @@ public class AuthFlowTests : IAsyncLifetime
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         var admin = await TestUsers.SeedActiveUserAsync(_fixture.Factory, UserRole.Admin, cancellationToken);
-        var rosterRecord = await SeedRosterRecordAsync(cancellationToken);
+        var (rosterRecord, _) = await TestUsers.SeedPendingPlayerAsync(_fixture.Factory, cancellationToken);
         using var client = await TestUsers.SignedInClientAsync(_fixture.Factory, admin, cancellationToken);
 
         var response = await client.PostAsJsonAsync(
@@ -75,7 +75,7 @@ public class AuthFlowTests : IAsyncLifetime
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         var admin = await TestUsers.SeedActiveUserAsync(_fixture.Factory, UserRole.Admin, cancellationToken);
-        var rosterRecord = await SeedRosterRecordAsync(cancellationToken);
+        var (rosterRecord, _) = await TestUsers.SeedPendingPlayerAsync(_fixture.Factory, cancellationToken);
 
         using var adminClient = await TestUsers.SignedInClientAsync(_fixture.Factory, admin, cancellationToken);
         await adminClient.PostAsJsonAsync("/admin/invites", new { RosterRecordId = rosterRecord.Id }, cancellationToken);
@@ -153,22 +153,5 @@ public class AuthFlowTests : IAsyncLifetime
         var match = Regex.Match(htmlBody, "token=([a-f0-9]+)");
         Assert.True(match.Success, $"No token found in email body: {htmlBody}");
         return match.Groups[1].Value;
-    }
-
-    private async Task<RosterRecord> SeedRosterRecordAsync(CancellationToken cancellationToken)
-    {
-        using var scope = _fixture.Factory.Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        var rosterRecord = new RosterRecord
-        {
-            Name = "Imported Player",
-            Email = $"{Guid.NewGuid()}@example.com",
-            Phone = "555-0101",
-            LegacyBalance = 0m
-        };
-        dbContext.RosterRecords.Add(rosterRecord);
-        await dbContext.SaveChangesAsync(cancellationToken);
-        return rosterRecord;
     }
 }

@@ -15,11 +15,11 @@
 
 ## 3. Roster Import
 
-- [ ] 3.1 Build the one-time spreadsheet importer (parse rows → roster records)
-- [ ] 3.2 Validate rows; flag unmatched/ambiguous/malformed rows for admin review
-- [ ] 3.3 Admin review UI to resolve flagged rows
-- [ ] 3.4 Make import idempotent (no duplicates on re-run)
-- [ ] 3.5 Cutover step: mark app as source of truth, retire spreadsheet
+- [x] 3.1 Build the one-time spreadsheet importer (parse rows → roster records) - CSV upload; historical per-date attendance imported as real Game/SignUp/Charge records, not just a roster summary (per user decision)
+- [x] 3.2 Validate rows; flag unmatched/ambiguous/malformed rows for admin review - every row in the real sheet lacks email/phone (D11), so 100% flag by design, not a bug
+- [x] 3.3 Admin review UI to resolve flagged rows - backend endpoint only (POST /admin/import/flagged-rows/{id}/resolve); no frontend UI, consistent with backend-first scope for this change
+- [x] 3.4 Make import idempotent (no duplicates on re-run) - keyed on Name (case-insensitive), the only stable identifier the source data provides
+- [x] 3.5 Cutover step - no code needed: the system never reads/writes the spreadsheet after the one-time upload, so there's no ongoing sync to cut over from; "app is source of truth" holds by construction
 
 ## 4. Game Scheduling
 

@@ -5,6 +5,7 @@ using ProjectThor.Api.Features.Charges;
 using ProjectThor.Api.Features.GameTemplates;
 using ProjectThor.Api.Features.Games;
 using ProjectThor.Api.Features.Health;
+using ProjectThor.Api.Features.Import;
 using ProjectThor.Api.Features.Invites;
 using ProjectThor.Api.Features.Notifications;
 using ProjectThor.Api.Features.SignUps;
@@ -132,6 +133,10 @@ app.MapMarkNotificationRead();
 app.MapGetVapidPublicKey();
 app.MapSubscribeToPush();
 app.MapUnsubscribeFromPush();
+
+app.MapImportRoster();
+app.MapListFlaggedRows();
+app.MapResolveFlaggedRow();
 
 app.Run();
 

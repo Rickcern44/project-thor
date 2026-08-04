@@ -55,4 +55,35 @@ public static class TestUsers
         var user = await SeedActiveUserAsync(factory, role, cancellationToken);
         return await SignedInClientAsync(factory, user, cancellationToken);
     }
+
+    /// <summary>RosterRecord + linked Pending User, matching what roster-import resolution creates.</summary>
+    public static async Task<(RosterRecord RosterRecord, User User)> SeedPendingPlayerAsync(
+        ApiWebApplicationFactory factory, CancellationToken cancellationToken)
+    {
+        using var scope = factory.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        var rosterRecord = new RosterRecord
+        {
+            Name = "Imported Player",
+            Email = $"{Guid.NewGuid()}@example.com",
+            Phone = "555-0101",
+            LegacyBalance = 0m
+        };
+        dbContext.RosterRecords.Add(rosterRecord);
+
+        var user = new User
+        {
+            Email = rosterRecord.Email,
+            Phone = rosterRecord.Phone,
+            Name = rosterRecord.Name,
+            Role = UserRole.Player,
+            Status = UserStatus.Pending,
+            RosterRecordId = rosterRecord.Id
+        };
+        dbContext.Users.Add(user);
+
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return (rosterRecord, user);
+    }
 }
