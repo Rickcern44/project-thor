@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using ProjectThor.Api.Infrastructure.Payments;
 using ProjectThor.Data;
 using ProjectThor.Data.Entities;
 
@@ -30,7 +31,9 @@ public static class CancelSignUpEndpoint
             return Results.NotFound();
         }
 
-        signUp.CancelledAt = DateTimeOffset.UtcNow;
+        var now = DateTimeOffset.UtcNow;
+        signUp.CancelledAt = now;
+        await ChargeErasure.EraseIfOwedAsync(dbContext, gameId, playerUserId, now, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Results.NoContent();

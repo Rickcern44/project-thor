@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using ProjectThor.Api.Infrastructure.Payments;
 using ProjectThor.Api.Infrastructure.SignUps;
 using ProjectThor.Data;
 using ProjectThor.Data.Entities;
@@ -55,6 +56,7 @@ public static class SignUpForGameEndpoint
             WaitlistPosition = waitlistPosition
         };
         dbContext.SignUps.Add(signUp);
+        dbContext.Charges.Add(ChargeFactory.CreateForSignUp(gameId, playerUserId, game.Fee));
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Results.Created($"/games/{gameId}/signup/{signUp.Id}", SignUpResponse.From(signUp));
