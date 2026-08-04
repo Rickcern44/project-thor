@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Data\ProjectThor.Data.csproj" />
+    <ProjectReference Include="..\..\ServiceDefaults\ProjectThor.ServiceDefaults.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -18,7 +18,7 @@ context: |
   please commit after tasks so that we can keep a work log
   Practices: Use TDD and BDD for development, and follow SOLID principles for code design. 
   Vertical Slice architecture will be used for the backend, and a component-based architecture will be used for the 
-  frontend.
+  frontend. You will use the aspire CLI paired with podman to run locally.
   Testing: Both the front end and backend will have unit tests and integration tests. 
   We will use xUnitV3 for backend testing and Playwright for frontend testing.
 
