@@ -6,6 +6,7 @@ public static class GetHealthEndpoint
 {
     public static void MapGetHealth(this IEndpointRouteBuilder app)
     {
+        // Intentionally unauthenticated so k8s liveness/readiness probes can call it without credentials.
         app.MapGet("/health", Handle);
     }
 
