@@ -46,7 +46,8 @@ jobs:
       - name: Build and push api image
         uses: docker/build-push-action@v6
         with:
-          context: src/api
+          context: src
+          file: src/api/Dockerfile
           push: true
           tags: |
             ${{ env.IMAGE }}:${{ steps.gitversion.outputs.semVer }}
