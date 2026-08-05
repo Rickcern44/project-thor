@@ -2,9 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - deployment.yaml
-  - service.yaml
+- deployment.yaml
+- service.yaml
 
 images:
-  - name: ghcr.io/rickcern44/project-thor-api
-    newTag: placeholder
+- name: ghcr.io/rickcern44/project-thor-api
+  newTag: 0.0.30-2
