@@ -24,7 +24,7 @@ jobs:
           # GITHUB_TOKEN authenticates as the github-actions bot, which the main
           # ruleset can't bypass on a personal repo (app bypass actors are org-only).
           # This PAT belongs to a repo admin, who is on the ruleset's bypass list.
-          token: ${{ secrets.PR_PYBASS_TOKEN }}
+          token: ${{ secrets.PR_BYPASS_TOKEN }}
 
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v3
