@@ -10,21 +10,22 @@ public static class GetHealthEndpoint
         app.MapGet("/health", Handle);
     }
 
-    private static async Task<IResult> Handle(AppDbContext dbContext)
+    private static async Task<IResult> Handle(AppDbContext dbContext, ILoggerFactory loggerFactory)
     {
-        var databaseReachable = await TryConnectAsync(dbContext);
+        var databaseReachable = await TryConnectAsync(dbContext, loggerFactory.CreateLogger(nameof(GetHealthEndpoint)));
         var response = new HealthResponse("healthy", DateTimeOffset.UtcNow, databaseReachable);
         return Results.Ok(response);
     }
 
-    private static async Task<bool> TryConnectAsync(AppDbContext dbContext)
+    private static async Task<bool> TryConnectAsync(AppDbContext dbContext, ILogger logger)
     {
         try
         {
             return await dbContext.Database.CanConnectAsync();
         }
-        catch
+        catch (Exception ex)
         {
+            logger.LogWarning(ex, "Health check could not reach the database.");
             return false;
         }
     }
