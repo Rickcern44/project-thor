@@ -51,5 +51,5 @@
 
 ## 8. Verification (Update)
 
-- [ ] 8.1 Re-validate every scenario in `specs/admin-roster-import-ui/spec.md` — including the selection and duplicate-email requirements — against the implementation
-- [ ] 8.2 Confirm `src/web` CI (`npm run check`, `npm run lint`, Playwright suite) and `src/api` tests (`dotnet test`) both pass end to end
+- [x] 8.1 Re-validate every scenario in `specs/admin-roster-import-ui/spec.md` — including the selection and duplicate-email requirements — against the implementation
+- [x] 8.2 Confirm `src/web` CI (`npm run check`, `npm run lint`, Playwright suite) and `src/api` tests (`dotnet test`) both pass end to end
