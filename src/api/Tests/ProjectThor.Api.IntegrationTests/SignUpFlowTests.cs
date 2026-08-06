@@ -118,6 +118,27 @@ public class SignUpFlowTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Player_cancels_their_waitlist_spot()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var game = await SeedOpenGameAsync(capacity: 1, cancellationToken);
+        using var rosteredClient = await TestUsers.ActiveClientAsync(_fixture.Factory, UserRole.Player, cancellationToken);
+        await rosteredClient.PostAsync($"/games/{game.Id}/signup", null, cancellationToken);
+
+        using var waitlistedClient = await TestUsers.ActiveClientAsync(_fixture.Factory, UserRole.Player, cancellationToken);
+        var signUpResponse = await waitlistedClient.PostAsync($"/games/{game.Id}/signup", null, cancellationToken);
+        var signUp = await signUpResponse.Content.ReadFromJsonAsync<SignUpResponse>(cancellationToken);
+        Assert.Equal("Waitlisted", signUp!.Status);
+
+        var cancelResponse = await waitlistedClient.PostAsync($"/games/{game.Id}/cancel", null, cancellationToken);
+        Assert.Equal(HttpStatusCode.NoContent, cancelResponse.StatusCode);
+
+        var rosterResponse = await rosteredClient.GetAsync($"/games/{game.Id}/roster", cancellationToken);
+        var roster = await rosterResponse.Content.ReadFromJsonAsync<List<SignUpResponse>>(cancellationToken);
+        Assert.DoesNotContain(roster!, s => s.Status == "Waitlisted");
+    }
+
+    [Fact]
     public async Task Admin_adds_and_removes_a_player_directly()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
@@ -156,6 +177,11 @@ public class SignUpFlowTests : IAsyncLifetime
 
         // Free the only roster spot.
         await adminClient.DeleteAsync($"/admin/games/{game.Id}/roster/{rosteredPlayer.Id}", cancellationToken);
+
+        // The system must not auto-promote: the waitlisted player stays waitlisted until the admin acts.
+        var rosterAfterFreeSpot = await adminClient.GetAsync($"/games/{game.Id}/roster", cancellationToken);
+        var signUpsAfterFreeSpot = await rosterAfterFreeSpot.Content.ReadFromJsonAsync<List<SignUpResponse>>(cancellationToken);
+        Assert.Contains(signUpsAfterFreeSpot!, s => s.PlayerUserId == waitlistedPlayer.Id && s.Status == "Waitlisted");
 
         var promoteResponse = await adminClient.PostAsJsonAsync(
             $"/admin/games/{game.Id}/promote", new { PlayerUserId = waitlistedPlayer.Id }, cancellationToken);
