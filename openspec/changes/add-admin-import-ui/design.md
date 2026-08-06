@@ -13,6 +13,7 @@
 - Any other admin screen (game/template management, ad-hoc games, roster add/remove, waitlist promotion, payment reconciliation, admin balance list) — still deferred per `add-player-web-ui`'s design.md D9.
 - A "resend invite" or "undo a resolved row" action — not built today; the backend has no un-resolve endpoint either.
 - Editing the parsed attendance/dues data during review — see D6.
+- Merging a duplicate person's history into an existing account — see D10. A collision is blocked, not resolved automatically.
 
 ## Decisions
 
@@ -40,10 +41,17 @@ On submit, each reviewed row is processed one at a time: `POST /admin/import/fla
 ### D8. No new backend endpoints
 Both calls submit needs (`resolve`, then `invite`) already exist. No batch endpoint is added — per-row sequencing is required anyway for D7's independent-outcome reporting, so a batch endpoint would just move the loop server-side for no benefit.
 
+### D9. Row selection: a checkbox per row, default unchecked, plus "select all"
+Each review row gets a `selected` checkbox, defaulting to unchecked; a header checkbox toggles all currently-loaded rows. Submit only processes rows where `selected` is true (and not already `success`) — everything else is left untouched in the pending queue. **Why:** confirmed with the user — the review queue can grow larger than an Admin wants to process in one sitting, and defaulting to "opt in" means Submit never silently processes more people than intended. This composes cleanly with D4's standing-queue model: an unselected row just shows up again next time the review step loads. **Alternatives:** default-checked with opt-out — rejected per explicit user preference; a hard cap on rows-per-batch — unnecessary, a checkbox already gives full control without an arbitrary limit.
+
+### D10. Duplicate-email pre-check moved into `ResolveFlaggedRowEndpoint`
+Both `User.Email` and `RosterRecord.Email` already carry a unique database index (from `add-league-tracker`, pre-existing). Today, resolving two flagged rows that happen to share an email — e.g. two spelling variants of the same person, resolved in different sessions — hits that constraint as a raw, unhandled exception (500), since neither endpoint pre-checks for it. This change adds an explicit check to `ResolveFlaggedRowEndpoint`: look up an existing `RosterRecord`/`User` by the submitted email before inserting, and if one exists, return `409 Conflict` with a clear message ("a player with this email already exists") instead of attempting the insert. The row stays unresolved; the Admin can correct the email or leave it for later. **Why:** "never duplicate what we add" only holds if a collision fails cleanly, not with a raw DB exception — this is the smallest fix that makes that guarantee real, and it reuses the existing per-row error-reporting path (D7) with no new UI concept. **Alternatives:** merge the new attendance history into the existing player instead of blocking — a materially bigger feature (backfilling `SignUp`/`Charge` rows against someone else's already-existing account); explicitly out of scope here, consistent with this change already not touching historical-data reconciliation (D6).
+
 ## Risks / Trade-offs
 
 - **N+1 round trips** (2 API calls per row, sequential) → acceptable at expected batch sizes (a season's roster); revisit only if that assumption stops holding.
 - **No undo for a wrongly-submitted row** → matches the backend, which has no un-resolve endpoint. Mitigated by the review step's explicit per-row confirmation before submit — the wizard doesn't auto-submit anything.
+- **The duplicate-email pre-check (D10) has a race window**: two concurrent resolve calls for the same new email could both pass the pre-check before either insert commits, and the second would still hit the raw unique-constraint 500. Acceptable — this app has a single admin driving the wizard sequentially, not concurrent admins racing the same row; the DB constraint remains the real backstop either way, this just makes the common case clean.
 - **Client-side CSV validation is extension-only**, not shape validation → a wrongly-shaped `.csv` still reaches the API and may just produce an unhelpful 0-games/0-flagged result. Re-implementing `CsvRosterParser`'s column-detection client-side would duplicate logic the backend should stay the sole owner of; acceptable for now.
 
 ## Migration Plan

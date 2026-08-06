@@ -34,3 +34,22 @@
 
 - [x] 5.1 Validate every scenario in `specs/admin-roster-import-ui/spec.md` against the actual implementation
 - [x] 5.2 Confirm `src/web` CI (`npm run check`, `npm run lint`, Playwright suite) passes end to end
+
+## 6. Row Selection
+
+- [ ] 6.1 Add a `selected` checkbox per review row (defaulting to unchecked) plus a header "select all" checkbox (D9)
+- [ ] 6.2 Submit processes only rows where `selected` is true and not already `success`; unselected rows are left untouched in the pending queue (D9)
+- [ ] 6.3 Playwright test: rows are unselected by default and submitting with nothing selected resolves/invites nothing
+- [ ] 6.4 Playwright test: selecting a subset and submitting only resolves/invites the selected rows, leaving the rest pending on the next review load
+
+## 7. Duplicate Email Protection
+
+- [ ] 7.1 `ResolveFlaggedRowEndpoint`: look up an existing `RosterRecord`/`User` by the submitted email before inserting; return `409 Conflict` with a clear message instead of letting the unique-constraint violation surface as a raw 500 (D10)
+- [ ] 7.2 Frontend: surface that `409`'s message on the row via the existing per-row error path — no new error-handling UI needed
+- [ ] 7.3 xUnit test (`ProjectThor.Api.UnitTests` or `IntegrationTests`): resolving a row whose email already belongs to an existing player returns `409`, not `500`, and does not create a second `User`/`RosterRecord`
+- [ ] 7.4 Playwright test: a row whose email collides with an existing player is reported as failed without blocking the other selected rows
+
+## 8. Verification (Update)
+
+- [ ] 8.1 Re-validate every scenario in `specs/admin-roster-import-ui/spec.md` — including the selection and duplicate-email requirements — against the implementation
+- [ ] 8.2 Confirm `src/web` CI (`npm run check`, `npm run lint`, Playwright suite) and `src/api` tests (`dotnet test`) both pass end to end
