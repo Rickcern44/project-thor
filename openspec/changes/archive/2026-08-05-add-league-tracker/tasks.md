@@ -60,6 +60,6 @@
 
 ## 8. Verification
 
-- [ ] 8.1 Validate scenarios from each spec against the implementation
-- [ ] 8.2 End-to-end dry run: import → invite → sign up → waitlist → promote → reconcile → mark paid
-- [ ] 8.3 Verify iOS push coverage gap is gracefully handled (in-app list always populated)
+- [x] 8.1 Validate scenarios from each spec against the implementation - audited all 6 specs against endpoints/tests; closed 2 real gaps (explicit waitlist-spot cancellation test, explicit no-auto-promote assertion) in SignUpFlowTests.cs; full suite (24 unit + 42 integration) passes
+- [x] 8.2 End-to-end dry run: import → invite → sign up → waitlist → promote → reconcile → mark paid - added EndToEndDryRunTests.cs chaining the full lifecycle through real HTTP calls; passes
+- [x] 8.3 Verify iOS push coverage gap is gracefully handled (in-app list always populated) - confirmed by code inspection: NotificationService.NotifyAsync always writes the Notification row before attempting push, and the push loop simply no-ops with zero subscriptions, so the in-app list is populated unconditionally regardless of push delivery
