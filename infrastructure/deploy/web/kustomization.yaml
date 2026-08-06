@@ -7,4 +7,4 @@ resources:
 
 images:
 - name: ghcr.io/rickcern44/project-thor-web
-  newTag: 0.0.32-2
+  newTag: 0.0.34-2
