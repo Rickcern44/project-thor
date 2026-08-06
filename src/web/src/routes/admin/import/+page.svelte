@@ -15,6 +15,7 @@
 
 	interface ReviewRow {
 		id: string;
+		selected: boolean;
 		name: string;
 		email: string;
 		phone: string;
@@ -72,6 +73,9 @@
 			const parsed = parseFlaggedRowData(row.rawData);
 			return {
 				id: row.id,
+				// D9: unchecked by default — an Admin opts in to who gets processed this session;
+				// unselected rows just stay in this same pending queue for next time.
+				selected: false,
 				name: parsed.Name,
 				email: '',
 				phone: '',
@@ -85,6 +89,17 @@
 		reviewLoading = false;
 	}
 
+	const allSelected = $derived(reviewRows.length > 0 && reviewRows.every((row) => row.selected));
+	const hasSubmittableRows = $derived(
+		reviewRows.some((row) => row.selected && row.status !== 'success')
+	);
+
+	function toggleSelectAll(checked: boolean) {
+		for (const row of reviewRows) {
+			row.selected = checked;
+		}
+	}
+
 	function isRowValid(row: ReviewRow) {
 		return row.name.trim().length > 0 && row.email.trim().length > 0 && row.phone.trim().length > 0;
 	}
@@ -94,7 +109,8 @@
 	async function handleSubmitAll() {
 		submitting = true;
 		for (const row of reviewRows) {
-			if (row.status === 'success') {
+			// D9: only selected rows are submitted — everything else is left untouched.
+			if (!row.selected || row.status === 'success') {
 				continue;
 			}
 
@@ -209,6 +225,14 @@
 		<table class="w-full text-sm">
 			<thead class="bg-surface-raised text-left text-text-muted">
 				<tr>
+					<th class="p-3">
+						<input
+							type="checkbox"
+							checked={allSelected}
+							aria-label="Select all"
+							onchange={(event) => toggleSelectAll(event.currentTarget.checked)}
+						/>
+					</th>
 					<th class="p-3">Name</th>
 					<th class="p-3">Email</th>
 					<th class="p-3">Phone</th>
@@ -221,6 +245,14 @@
 			<tbody>
 				{#each reviewRows as row (row.id)}
 					<tr class="border-t border-border bg-surface align-top">
+						<td class="p-3">
+							<input
+								type="checkbox"
+								bind:checked={row.selected}
+								disabled={row.status === 'success'}
+								aria-label="Select {row.name}"
+							/>
+						</td>
 						<td class="p-3">
 							<input
 								type="text"
@@ -267,7 +299,7 @@
 	<button
 		type="button"
 		onclick={handleSubmitAll}
-		disabled={submitting || reviewRows.every((row) => row.status === 'success')}
+		disabled={submitting || !hasSubmittableRows}
 		class="mt-4 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-fg transition-colors hover:bg-accent-strong disabled:opacity-50"
 	>
 		{submitting ? 'Submitting…' : 'Submit'}

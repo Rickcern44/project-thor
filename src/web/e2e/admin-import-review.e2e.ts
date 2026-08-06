@@ -63,6 +63,7 @@ test('a row missing email or phone cannot be submitted', async ({ page }) => {
 
 	await page.goto('/admin/import');
 	await page.getByRole('button', { name: /2\. Review/ }).click();
+	await page.getByRole('checkbox', { name: 'Select Jane Doe' }).check();
 	await page.getByRole('button', { name: 'Submit' }).click();
 
 	await expect(page.getByText('Name, email, and phone are required.')).toBeVisible();

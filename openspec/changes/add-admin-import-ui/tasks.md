@@ -37,10 +37,10 @@
 
 ## 6. Row Selection
 
-- [ ] 6.1 Add a `selected` checkbox per review row (defaulting to unchecked) plus a header "select all" checkbox (D9)
-- [ ] 6.2 Submit processes only rows where `selected` is true and not already `success`; unselected rows are left untouched in the pending queue (D9)
-- [ ] 6.3 Playwright test: rows are unselected by default and submitting with nothing selected resolves/invites nothing
-- [ ] 6.4 Playwright test: selecting a subset and submitting only resolves/invites the selected rows, leaving the rest pending on the next review load
+- [x] 6.1 Add a `selected` checkbox per review row (defaulting to unchecked) plus a header "select all" checkbox (D9)
+- [x] 6.2 Submit processes only rows where `selected` is true and not already `success`; unselected rows are left untouched in the pending queue (D9)
+- [x] 6.3 Playwright test: rows are unselected by default and submitting with nothing selected resolves/invites nothing
+- [x] 6.4 Playwright test: selecting a subset and submitting only resolves/invites the selected rows, leaving the rest pending on the next review load
 
 ## 7. Duplicate Email Protection
 
