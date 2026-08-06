@@ -32,5 +32,5 @@
 
 ## 5. Verification
 
-- [ ] 5.1 Validate every scenario in `specs/admin-roster-import-ui/spec.md` against the actual implementation
-- [ ] 5.2 Confirm `src/web` CI (`npm run check`, `npm run lint`, Playwright suite) passes end to end
+- [x] 5.1 Validate every scenario in `specs/admin-roster-import-ui/spec.md` against the actual implementation
+- [x] 5.2 Confirm `src/web` CI (`npm run check`, `npm run lint`, Playwright suite) passes end to end
