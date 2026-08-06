@@ -8,11 +8,11 @@
 
 ## 2. Import Step
 
-- [ ] 2.1 Build a `DropZone` component: drag-and-drop plus a real `<input type="file" accept=".csv">` fallback; rejects a non-`.csv` selection client-side with a clear message before any upload (D5)
-- [ ] 2.2 Season-year input alongside the file selection
-- [ ] 2.3 Wire submission to the existing `POST /admin/import/roster`; show the resulting games-created / rows-flagged / rows-skipped-as-duplicate counts
-- [ ] 2.4 Playwright test: a successful import shows the summary counts
-- [ ] 2.5 Playwright test: selecting a non-`.csv` file is rejected before any upload call
+- [x] 2.1 Build a `DropZone` component: drag-and-drop plus a real `<input type="file" accept=".csv">` fallback; rejects a non-`.csv` selection client-side with a clear message before any upload (D5)
+- [x] 2.2 Season-year input alongside the file selection
+- [x] 2.3 Wire submission to the existing `POST /admin/import/roster`; show the resulting games-created / rows-flagged / rows-skipped-as-duplicate counts
+- [x] 2.4 Playwright test: a successful import shows the summary counts
+- [x] 2.5 Playwright test: selecting a non-`.csv` file is rejected before any upload call
 
 ## 3. Review Step
 

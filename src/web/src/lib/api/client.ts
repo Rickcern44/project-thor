@@ -16,11 +16,14 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+	// A FormData body (multipart upload) must not get a manual Content-Type — fetch sets its
+	// own with the correct boundary, and overriding it here would corrupt the request.
+	const isFormData = init?.body instanceof FormData;
 	const response = await fetch(`${API_ORIGIN}${path}`, {
 		...init,
 		credentials: 'include',
 		headers: {
-			...(init?.body ? { 'Content-Type': 'application/json' } : {}),
+			...(init?.body && !isFormData ? { 'Content-Type': 'application/json' } : {}),
 			...init?.headers
 		}
 	});
@@ -127,4 +130,20 @@ export function getNotifications() {
 
 export function markNotificationRead(id: string) {
 	return request<void>(`/notifications/${id}/read`, { method: 'POST' });
+}
+
+export interface ImportRosterResult {
+	gamesCreated: number;
+	rowsFlagged: number;
+	rowsSkippedAsDuplicate: number;
+}
+
+export function importRoster(file: File, seasonYear: number) {
+	const formData = new FormData();
+	formData.append('file', file);
+	formData.append('seasonYear', String(seasonYear));
+	return request<ImportRosterResult>('/admin/import/roster', {
+		method: 'POST',
+		body: formData
+	});
 }
