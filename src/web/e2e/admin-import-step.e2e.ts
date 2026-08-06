@@ -16,7 +16,7 @@ test('a successful import shows the summary counts', async ({ page }) => {
 		mimeType: 'text/csv',
 		buffer: Buffer.from('Name,8-Jan,Total Due,Amount Paid\nJane Doe,x,50,50\n')
 	});
-	await page.getByRole('button', { name: 'Import' }).click();
+	await page.getByRole('button', { name: 'Import', exact: true }).click();
 
 	await expect(page.getByText('Import complete')).toBeVisible();
 	await expect(page.getByText('3', { exact: true })).toBeVisible();
@@ -41,6 +41,6 @@ test('selecting a non-CSV file is rejected before any upload call', async ({ pag
 	});
 
 	await expect(page.getByText('is not a CSV file')).toBeVisible();
-	await expect(page.getByRole('button', { name: 'Import' })).toBeDisabled();
+	await expect(page.getByRole('button', { name: 'Import', exact: true })).toBeDisabled();
 	expect(uploadCalled).toBe(false);
 });

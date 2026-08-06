@@ -14,6 +14,15 @@ const currencyFormatter = new Intl.NumberFormat(undefined, {
 	currency: 'USD'
 });
 
+// A bare calendar date (e.g. from a .NET DateOnly) has no timezone — format in UTC so a
+// "2026-01-08" value doesn't shift to the 7th for anyone west of UTC.
+const dateOnlyFormatter = new Intl.DateTimeFormat(undefined, {
+	year: 'numeric',
+	month: 'short',
+	day: 'numeric',
+	timeZone: 'UTC'
+});
+
 export function formatGameDateTime(iso: string) {
 	const date = new Date(iso);
 	return `${dateFormatter.format(date)} · ${timeFormatter.format(date)}`;
@@ -21,4 +30,8 @@ export function formatGameDateTime(iso: string) {
 
 export function formatCurrency(amount: number) {
 	return currencyFormatter.format(amount);
+}
+
+export function formatDateOnly(isoDate: string) {
+	return dateOnlyFormatter.format(new Date(isoDate));
 }

@@ -16,19 +16,19 @@
 
 ## 3. Review Step
 
-- [ ] 3.1 Extend `lib/api/client.ts` with typed wrappers for `GET /admin/import/flagged-rows`, `POST /admin/import/flagged-rows/{id}/resolve`, and `POST /admin/invites`
-- [ ] 3.2 Fetch pending flagged rows and decode each row's `RawData` JSON (`Name`, `AttendedDates`, `TotalDue`, `AmountPaid`) for display (D6)
-- [ ] 3.3 Review table: editable Name, required Email and Phone inputs; read-only attended dates, total due, and amount paid (D6)
-- [ ] 3.4 Client-side validation: block submission of a row missing email or phone, indicating the missing field
-- [ ] 3.5 Playwright test: the review list shows each pending row's parsed name, attended dates, total due, and amount paid
-- [ ] 3.6 Playwright test: a row missing email or phone cannot be submitted
+- [x] 3.1 Extend `lib/api/client.ts` with typed wrappers for `GET /admin/import/flagged-rows`, `POST /admin/import/flagged-rows/{id}/resolve`, and `POST /admin/invites`
+- [x] 3.2 Fetch pending flagged rows and decode each row's `RawData` JSON (`Name`, `AttendedDates`, `TotalDue`, `AmountPaid`) for display (D6) — note: `RawData` is PascalCase JSON (a plain `JsonSerializer.Serialize` call server-side, not the Web-defaults HTTP pipeline), unlike every other camelCase response on this client
+- [x] 3.3 Review table: editable Name, required Email and Phone inputs; read-only attended dates, total due, and amount paid (D6)
+- [x] 3.4 Client-side validation: block submission of a row missing email or phone, indicating the missing field — implemented as a per-row check inside the single "Submit" action (skips the API calls and marks that row `error` instead of blocking the whole batch), consistent with D7's per-row independent outcome
+- [x] 3.5 Playwright test: the review list shows each pending row's parsed name, attended dates, total due, and amount paid
+- [x] 3.6 Playwright test: a row missing email or phone cannot be submitted
 
 ## 4. Submit Step
 
-- [ ] 4.1 Submit reviewed rows sequentially, each as resolve → invite (`POST .../resolve` then `POST /admin/invites` for the resulting `rosterRecordId`), tracking per-row status (`pending` / `success` / `error`) (D7, D8)
-- [ ] 4.2 Render each row's outcome as it completes; one row's failure does not block submission of the remaining rows
-- [ ] 4.3 Playwright test: submitting a fully reviewed row resolves it and sends its invite, shown as succeeded
-- [ ] 4.4 Playwright test: one row's submission failure is reported without blocking the remaining rows' submission
+- [x] 4.1 Submit reviewed rows sequentially, each as resolve → invite (`POST .../resolve` then `POST /admin/invites` for the resulting `rosterRecordId`), tracking per-row status (`pending` / `success` / `error`) (D7, D8)
+- [x] 4.2 Render each row's outcome as it completes; one row's failure does not block submission of the remaining rows
+- [x] 4.3 Playwright test: submitting a fully reviewed row resolves it and sends its invite, shown as succeeded
+- [x] 4.4 Playwright test: one row's submission failure is reported without blocking the remaining rows' submission
 
 ## 5. Verification
 

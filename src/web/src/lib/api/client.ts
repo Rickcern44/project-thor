@@ -147,3 +147,55 @@ export function importRoster(file: File, seasonYear: number) {
 		body: formData
 	});
 }
+
+export interface FlaggedRowResponse {
+	id: string;
+	rawData: string;
+	reason: string;
+	createdAt: string;
+}
+
+export function getFlaggedRows() {
+	return request<FlaggedRowResponse[]>('/admin/import/flagged-rows');
+}
+
+/**
+ * Shape of `FlaggedRowResponse.rawData` once JSON-parsed. Serialized server-side via a plain
+ * `JsonSerializer.Serialize` call (not the Web-defaults HTTP pipeline), so — unlike every other
+ * response on this client — these keys are PascalCase, not camelCase.
+ */
+export interface PendingRosterRow {
+	Name: string;
+	AttendedDates: string[];
+	TotalDue: number;
+	AmountPaid: number;
+}
+
+export function parseFlaggedRowData(rawData: string): PendingRosterRow {
+	return JSON.parse(rawData) as PendingRosterRow;
+}
+
+export interface ResolveFlaggedRowResult {
+	rosterRecordId: string;
+	userId: string;
+}
+
+export function resolveFlaggedRow(id: string, name: string, email: string, phone: string) {
+	return request<ResolveFlaggedRowResult>(`/admin/import/flagged-rows/${id}/resolve`, {
+		method: 'POST',
+		body: JSON.stringify({ name, email, phone })
+	});
+}
+
+export interface IssueInviteResult {
+	userId: string;
+	email: string;
+	status: string;
+}
+
+export function issueInvite(rosterRecordId: string) {
+	return request<IssueInviteResult>('/admin/invites', {
+		method: 'POST',
+		body: JSON.stringify({ rosterRecordId })
+	});
+}
