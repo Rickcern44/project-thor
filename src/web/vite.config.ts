@@ -23,8 +23,8 @@ export default defineConfig({
 				name: 'Project Thor',
 				short_name: 'ProjectThor',
 				description: 'League scheduling, sign-ups, and payment tracking.',
-				theme_color: '#0f172a',
-				background_color: '#ffffff',
+				theme_color: '#0b1220',
+				background_color: '#0b1220',
 				display: 'standalone',
 				start_url: '/',
 				icons: [
