@@ -30,13 +30,23 @@ builder.Services.AddDbContext<AppDbContext>((sp, options) =>
 });
 
 builder.Services.Configure<ResendOptions>(builder.Configuration.GetSection(ResendOptions.SectionName));
-builder.Services.AddHttpClient<IEmailSender, ResendEmailSender>((sp, client) =>
+
+// Development has no real Resend API key configured, so magic links are logged to the console
+// instead of actually emailed. Everywhere else, send through Resend for real.
+if (builder.Environment.IsDevelopment())
 {
-    var resendOptions = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<ResendOptions>>().Value;
-    client.BaseAddress = new Uri("https://api.resend.com/");
-    client.DefaultRequestHeaders.Authorization =
-        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", resendOptions.ApiKey);
-});
+    builder.Services.AddSingleton<IEmailSender, ConsoleEmailSender>();
+}
+else
+{
+    builder.Services.AddHttpClient<IEmailSender, ResendEmailSender>((sp, client) =>
+    {
+        var resendOptions = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<ResendOptions>>().Value;
+        client.BaseAddress = new Uri("https://api.resend.com/");
+        client.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", resendOptions.ApiKey);
+    });
+}
 
 builder.Services.Configure<VapidOptions>(builder.Configuration.GetSection(VapidOptions.SectionName));
 builder.Services.AddSingleton<WebPushClient>();
@@ -92,6 +102,34 @@ if (app.Environment.IsDevelopment())
     using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await dbContext.Database.MigrateAsync();
+
+    async Task EnsureSeedUserAsync(string email, string name, UserRole role)
+    {
+        if (await dbContext.Users.AnyAsync(u => u.Email == email))
+        {
+            return;
+        }
+
+        dbContext.Users.Add(new User
+        {
+            Email = email,
+            Phone = "555-0100",
+            Name = name,
+            Role = role,
+            Status = UserStatus.Active,
+            ActivatedAt = DateTimeOffset.UtcNow
+        });
+        await dbContext.SaveChangesAsync();
+    }
+
+    const string testPlayerEmail = "player@example.com";
+    const string testAdminEmail = "admin@example.com";
+    await EnsureSeedUserAsync(testPlayerEmail, "Test Player", UserRole.Player);
+    await EnsureSeedUserAsync(testAdminEmail, "Test Admin", UserRole.Admin);
+
+    app.Logger.LogInformation(
+        "Dev seed — log in as {TestPlayerEmail} (Player) or {TestAdminEmail} (Admin) to test locally",
+        testPlayerEmail, testAdminEmail);
 }
 
 app.UseCors("Frontend");
