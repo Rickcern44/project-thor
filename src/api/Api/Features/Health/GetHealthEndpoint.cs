@@ -13,7 +13,8 @@ public static class GetHealthEndpoint
     private static async Task<IResult> Handle(AppDbContext dbContext, ILoggerFactory loggerFactory)
     {
         var databaseReachable = await TryConnectAsync(dbContext, loggerFactory.CreateLogger(nameof(GetHealthEndpoint)));
-        var response = new HealthResponse("healthy", DateTimeOffset.UtcNow, databaseReachable);
+        var status = databaseReachable ? "healthy" : "unhealthy";
+        var response = new HealthResponse(status, DateTimeOffset.UtcNow, databaseReachable);
         return Results.Ok(response);
     }
 
