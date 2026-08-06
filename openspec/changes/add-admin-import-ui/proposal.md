@@ -21,6 +21,6 @@
 
 ## Impact
 
-- **New implementation in `src/web`**: an `(admin)` route group gated on `Role === 'Admin'` (distinct from `add-player-web-ui`'s any-authenticated-user guard), and wizard components (drop zone, review table, submit summary) built on the existing design-token system and `AppShell`.
+- **New implementation in `src/web`**: an `admin/` route gated on `Role === 'Admin'` (distinct from `add-player-web-ui`'s any-authenticated-user guard), and wizard components (drop zone, review table, submit summary) built on the existing design-token system and `AppShell`.
 - **No changes to `src/api`**: consumes `/admin/import/roster`, `/admin/import/flagged-rows`, `/admin/import/flagged-rows/{id}/resolve`, and `/admin/invites` exactly as they exist today.
 - **No breaking changes** to any archived or active capability.

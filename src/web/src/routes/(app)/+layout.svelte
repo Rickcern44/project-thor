@@ -3,11 +3,11 @@
 	import { refreshNotifications } from '$lib/notifications.svelte';
 	import type { LayoutProps } from './$types';
 
-	let { children }: LayoutProps = $props();
+	let { data, children }: LayoutProps = $props();
 
 	refreshNotifications();
 </script>
 
-<AppShell>
+<AppShell role={data.user.role}>
 	{@render children()}
 </AppShell>

@@ -10,14 +10,19 @@ export const mockUser = {
 	role: 'Player'
 };
 
+export const mockAdminUser = {
+	id: '22222222-2222-2222-2222-222222222222',
+	name: 'Alex Admin',
+	email: 'admin@example.com',
+	role: 'Admin'
+};
+
 export function jsonResponse(body: unknown, status = 200) {
 	return { status, contentType: 'application/json', body: JSON.stringify(body) };
 }
 
-export async function mockAuthenticated(page: Page) {
-	await page.route(`${API_ORIGIN}/auth/me`, (route: Route) =>
-		route.fulfill(jsonResponse(mockUser))
-	);
+export async function mockAuthenticated(page: Page, user: typeof mockUser = mockUser) {
+	await page.route(`${API_ORIGIN}/auth/me`, (route: Route) => route.fulfill(jsonResponse(user)));
 }
 
 export async function mockUnauthenticated(page: Page) {

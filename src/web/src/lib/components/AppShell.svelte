@@ -1,18 +1,24 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
-	import { Bell, Home, User, Wallet } from '@lucide/svelte';
+	import { Bell, Home, Shield, User, Wallet } from '@lucide/svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import { unreadCount } from '$lib/notifications.svelte';
 
-	let { children } = $props();
+	let { children, role }: { children: import('svelte').Snippet; role?: string } = $props();
 
-	const navItems = [
+	const playerNavItems = [
 		{ href: '/', label: 'Live Game', icon: Home },
 		{ href: '/balance', label: 'Balance', icon: Wallet },
 		{ href: '/notifications', label: 'Notifications', icon: Bell },
 		{ href: '/profile', label: 'Profile', icon: User }
 	] as const;
+
+	const adminNavItem = { href: '/admin/import', label: 'Admin', icon: Shield } as const;
+
+	// D3 (add-admin-import-ui): one conditional entry, shown only for Admins, rather than a
+	// parallel admin nav system.
+	const navItems = $derived(role === 'Admin' ? [...playerNavItems, adminNavItem] : playerNavItems);
 
 	function isActive(href: string) {
 		return href === '/' ? page.url.pathname === '/' : page.url.pathname.startsWith(href);

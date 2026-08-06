@@ -1,10 +1,10 @@
 ## 1. Auth & Shell Foundation
 
-- [ ] 1.1 Build `(admin)` route group layout guard: `export const ssr = false`, calls `GET /auth/me`, redirects unauthenticated visitors to `/login` and authenticated non-admins to `/` (D1)
-- [ ] 1.2 Build a minimal `AdminShell` component: title bar + logout, not the player `AppShell` (D2)
-- [ ] 1.3 Add a conditional "Admin" nav entry to the existing `AppShell`, shown only when the signed-in user's role is Admin, linking to `/admin/import` (D3)
-- [ ] 1.4 Playwright test: an authenticated non-admin visiting `/admin/import` is denied/redirected
-- [ ] 1.5 Playwright test: an unauthenticated visitor hitting `/admin/import` is redirected to `/login`
+- [x] 1.1 Build `src/routes/admin/+layout.ts` guard: `export const ssr = false`, calls `GET /auth/me`, redirects unauthenticated visitors to `/login` and authenticated non-admins to `/` (D1) — a plain `admin/` folder, not a `(admin)` route *group*: groups are invisible in the URL, and this needed the literal `/admin/import` path
+- [x] 1.2 Build a minimal `AdminShell` component: title bar + logout, not the player `AppShell` (D2)
+- [x] 1.3 Add a conditional "Admin" nav entry to the existing `AppShell`, shown only when the signed-in user's role is Admin, linking to `/admin/import` (D3)
+- [x] 1.4 Playwright test: an authenticated non-admin visiting `/admin/import` is denied/redirected
+- [x] 1.5 Playwright test: an unauthenticated visitor hitting `/admin/import` is redirected to `/login`
 
 ## 2. Import Step
 
