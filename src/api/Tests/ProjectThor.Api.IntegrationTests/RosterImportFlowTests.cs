@@ -85,4 +85,39 @@ public class RosterImportFlowTests : IAsyncLifetime
 
         Assert.Single(flaggedRows);
     }
+
+    [Fact]
+    public async Task Resolving_a_row_with_an_already_used_email_returns_conflict_not_a_server_error()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        using var adminClient = await TestUsers.ActiveClientAsync(_fixture.Factory, UserRole.Admin, cancellationToken);
+        var (existingRosterRecord, _) = await TestUsers.SeedPendingPlayerAsync(_fixture.Factory, cancellationToken);
+
+        using var form = new MultipartFormDataContent();
+        form.Add(new StringContent("2026"), "seasonYear");
+        form.Add(new ByteArrayContent(Encoding.UTF8.GetBytes(SampleCsv)), "file", "roster.csv");
+        await adminClient.PostAsync("/admin/import/roster", form, cancellationToken);
+
+        var flaggedResponse = await adminClient.GetAsync("/admin/import/flagged-rows", cancellationToken);
+        var flaggedRows = JsonSerializer.Deserialize<JsonElement[]>(
+            await flaggedResponse.Content.ReadAsStringAsync(cancellationToken))!;
+        var flaggedId = flaggedRows[0].GetProperty("id").GetGuid();
+
+        var resolveResponse = await adminClient.PostAsJsonAsync(
+            $"/admin/import/flagged-rows/{flaggedId}/resolve",
+            new { Name = "John Cooke", Email = existingRosterRecord.Email, Phone = "555-0100" },
+            cancellationToken);
+
+        Assert.Equal(HttpStatusCode.Conflict, resolveResponse.StatusCode);
+
+        using var scope = _fixture.Factory.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        var rosterRecordCount = await dbContext.RosterRecords.CountAsync(
+            r => r.Email == existingRosterRecord.Email, cancellationToken);
+        Assert.Equal(1, rosterRecordCount);
+
+        var stillPendingRow = await dbContext.FlaggedImportRows.SingleAsync(f => f.Id == flaggedId, cancellationToken);
+        Assert.Equal(ImportRowStatus.Pending, stillPendingRow.Status);
+    }
 }

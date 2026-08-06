@@ -30,6 +30,16 @@ public static class ResolveFlaggedRowEndpoint
             return Results.NotFound();
         }
 
+        // User.Email and RosterRecord.Email both carry a unique index - check up front so a
+        // collision (e.g. two spelling variants of the same person, resolved in different
+        // sessions) comes back as a clean 409 instead of a raw constraint-violation 500.
+        var emailAlreadyExists = await dbContext.Users.AnyAsync(u => u.Email == request.Email, cancellationToken)
+            || await dbContext.RosterRecords.AnyAsync(r => r.Email == request.Email, cancellationToken);
+        if (emailAlreadyExists)
+        {
+            return Results.Conflict("A player with this email already exists.");
+        }
+
         var pending = JsonSerializer.Deserialize<PendingRosterRow>(flaggedRow.RawData)!;
         var attendedDates = pending.AttendedDates.OrderBy(d => d).ToList();
         var perGameRate = attendedDates.Count > 0 ? Math.Round(pending.TotalDue / attendedDates.Count, 2) : 0m;

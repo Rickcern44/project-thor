@@ -44,10 +44,10 @@
 
 ## 7. Duplicate Email Protection
 
-- [ ] 7.1 `ResolveFlaggedRowEndpoint`: look up an existing `RosterRecord`/`User` by the submitted email before inserting; return `409 Conflict` with a clear message instead of letting the unique-constraint violation surface as a raw 500 (D10)
-- [ ] 7.2 Frontend: surface that `409`'s message on the row via the existing per-row error path — no new error-handling UI needed
-- [ ] 7.3 xUnit test (`ProjectThor.Api.UnitTests` or `IntegrationTests`): resolving a row whose email already belongs to an existing player returns `409`, not `500`, and does not create a second `User`/`RosterRecord`
-- [ ] 7.4 Playwright test: a row whose email collides with an existing player is reported as failed without blocking the other selected rows
+- [x] 7.1 `ResolveFlaggedRowEndpoint`: look up an existing `RosterRecord`/`User` by the submitted email before inserting; return `409 Conflict` with a clear message instead of letting the unique-constraint violation surface as a raw 500 (D10)
+- [x] 7.2 Frontend: surface that `409`'s message on the row via the existing per-row error path — no new error-handling UI needed (verified, no code change required)
+- [x] 7.3 Integration test (`ProjectThor.Api.IntegrationTests`): resolving a row whose email already belongs to an existing player returns `409`, not `500`, and does not create a second `RosterRecord`, and leaves the flagged row `Pending`
+- [x] 7.4 Playwright test: a row whose email collides with an existing player is reported as failed without blocking the other selected rows
 
 ## 8. Verification (Update)
 
